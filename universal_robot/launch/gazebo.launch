@@ -1,0 +1,34 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+<launch>
+    <group ns = "/simple_robot">
+        <!-- robot model -->
+        <param name = "robot_description" command = "$(find xacro)/xacro --inorder '$(find universal_robot)/urdf/robot_description.xacro'"/>
+        <arg name='x' default = "0"/>
+        <arg name='y' default = "0"/>
+        <arg name='z' default = "0"/>
+        
+        <!-- launch model in gazebo -->
+        <node name = "robot" pkg = "gazebo_ros" type = "spawn_model" output = "screen"
+            args = "-urdf -param robot_description -model simple_robot -x $(arg x) -y $(arg y) -z $(arg z)"/>
+
+        <!-- load controller -->
+        <rosparam command="load" file="$(find universal_robot)/config/control.yaml"/>
+
+        <node name="controller_spawner" pkg = "controller_manager" type = "spawner"
+            respawn="false" output = "screen" ns= "/simple_robot"
+            args ="--namespace=/simple_robot
+            joint_state_controller
+            joint1_position_controller
+            joint2_position_controller
+            joint3_position_controller
+            joint4_position_controller
+            joint5_position_controller
+            joint6_position_controller
+            --timeout 60">
+        </node>
+
+        <!-- rqt -->
+        <node name= "rqt_reconfigure" pkg = "rqt_reconfigure" type= "rqt_reconfigure"/>
+        <node name= "rqt_publisher" pkg = "rqt_publisher" type = "rqt_publisher"/>
+    </group>
+</launch>

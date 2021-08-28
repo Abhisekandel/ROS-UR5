@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<robot name = "simple_robot"  xmlns:xacro="http://www.ros.org/wiki/xacro">
+<!--importing required functions-->
+  <xacro:include filename ="$(find  universal_robot)/urdf/link_length.xacro"/>
+  <xacro:include filename ="$(find  universal_robot)/urdf/Paramaters.xacro"/>
+  
+  <xacro:property name="d1" value ="0.163"/>
+  <xacro:property name="a2" value ="-0.425"/>
+  <xacro:property name="a3" value ="-0.392"/>
+  <xacro:property name="d4" value ="0.127"/>
+  <xacro:property name="d5" value ="0.1"/>
+  <xacro:property name="d6" value ="0.1"/>
+
+  <!--shoulder elbow offset-->
+ <xacro:property name="shoulder_offset" value ="0.138"/>
+ <xacro:property name="elbow_offset" value ="-0.131"/>
+
+ <!--link length-->
+
+ <xacro:property name="shoulder_height" value ="${d1}"/>
+
+ <xacro:property name="upper_arm_length" value ="${-a2}"/>
+ <xacro:property name="forarm_length" value ="${-a3}"/>
+ <xacro:property name="wrist_1_length" value ="${d4}"/>
+ <xacro:property name="wrist_2_length" value ="${d5}"/>
+ <xacro:property name="wrist_3_length" value ="${d6}"/>
+
+ <!--robot description-->
+  <m_link_mesh name = "${l_0}" 
+  origin_rpy ="0 0 0" origin_xyz="0 0 0"
+  mass ="3.7" ixx ="0.00443" ixy="0" ixz="0"
+  iyy="0.00443" iyz="0" izz="0.0072"
+  mesh ="package://universal_robot/meshes/visual/base.dae"
+  meshfile ="package://universal_robot/meshes/collision/base.stl" 
+  meshscale ="1 1 1"/>
+
+  <link name="world"/>
+    
+  
+
+  <joint name="world" type="fixed">
+   <parent link="world"/>
+   <child link="${l_0}"/>
+   <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <m_joint name ="${l_0}_${l_1}"  type="revolute"
+    axis_xyz="0.0 0.0 1"
+    origin_rpy="0 0 0" origin_xyz="0 0 ${shoulder_height}"
+    parent ="${l_0}" child="${l_1}"
+    limit_l="-3.14" limit_u="3.14" limit_e="1000" limit_v="0.5"/>
+
+  <m_link_mesh name = "${l_1}" 
+  mass ="3.7" ixx ="0.01026" ixy="0" ixz="0"
+  iyy="0.01026" iyz="0" izz="0.0066"
+  origin_rpy ="0 0 0" origin_xyz="0 0 0"
+  mesh ="package://universal_robot/meshes/visual/shoulder.dae"
+  meshfile ="package://universal_robot/meshes/collision/shoulder.stl" 
+  meshscale ="1 1 1"/>
+
+
+  <m_joint name ="${l_1}_${l_2}"  type="revolute"
+    axis_xyz="0.0 1 0"
+    origin_rpy="0 0 0" origin_xyz="0 ${shoulder_offset} 0"
+    parent ="${l_1}" child="${l_2}"
+    limit_l="-3.14" limit_u="3.14" limit_e="1000" limit_v="0.5"/>
+
+  <m_link_mesh name = "${l_2}" 
+  mass ="8.393" ixx ="0.022689" ixy="0" ixz="0"
+  iyy="0.022689" iyz="0" izz="0.0151"
+  origin_rpy ="0 0 0" origin_xyz="0 0 0"
+  mesh ="package://universal_robot/meshes/visual/upperarm.dae"
+  meshfile ="package://universal_robot/meshes/collision/upperarm.stl" 
+  meshscale ="1 1 1"/>
+
+
+  <m_joint name ="${l_2}_${l_3}"  type="revolute"
+    axis_xyz="0.0 1 0"
+    origin_rpy="0 0 0" origin_xyz="0 ${elbow_offset} ${upper_arm_length}"
+    parent ="${l_2}" child="${l_3}"
+    limit_l="-3.14" limit_u="3.14" limit_e="1000" limit_v="0.5"/>
+
+  <m_link_mesh name = "${l_3}"
+  mass ="2.33" ixx ="0.01944" ixy="0" ixz="0"
+  iyy="0.01944" iyz="0" izz="0.00409" 
+  origin_rpy ="0 0 0" origin_xyz="0 0 0"
+  mesh ="package://universal_robot/meshes/visual/forearm.dae"
+  meshfile ="package://universal_robot/meshes/collision/forearm.stl" 
+  meshscale ="1 1 1"/>
+
+  <m_joint name ="${l_3}_${l_4}"  type="revolute"
+    axis_xyz="0.0 1 0"
+    origin_rpy="0 0 0" origin_xyz="0 0 ${forarm_length}"
+    parent ="${l_3}" child="${l_4}"
+    limit_l="-3.14" limit_u="3.14" limit_e="1000" limit_v="0.5"/>
+
+  <m_link_mesh name = "${l_4}" 
+  mass ="1.219" ixx ="0.1111" ixy="0" ixz="0"
+  iyy="0.1111" iyz="0" izz="0.00409"
+  origin_rpy ="0 0 0" origin_xyz="0 0 0"
+  mesh ="package://universal_robot/meshes/visual/wrist1.dae"
+  meshfile ="package://universal_robot/meshes/collision/wrist1.stl" 
+  meshscale ="1 1 1"/>
+
+
+  <m_joint name ="${l_4}_${l_5}"  type="revolute"
+    axis_xyz="0.0 0 1"
+    origin_rpy="0 0 0" origin_xyz="0 ${wrist_1_length} 0"
+    parent ="${l_4}" child="${l_5}"
+    limit_l="-3.14" limit_u="3.14" limit_e="1000" limit_v="0.5"/>
+
+  <m_link_mesh name = "${l_5}" 
+  mass ="3.7" ixx ="0.1111" ixy="0" ixz="0"
+  iyy="0.1111" iyz="0" izz="0.21942"
+  origin_rpy ="0 0 0" origin_xyz="0 0 0"
+  mesh ="package://universal_robot/meshes/visual/wrist2.dae"
+  meshfile ="package://universal_robot/meshes/collision/wrist2.stl" 
+  meshscale ="1 1 1"/>
+
+  <m_joint name ="${l_5}_${l_6}"  type="revolute"
+    axis_xyz="0.0 1 0"
+    origin_rpy="0 0 0" origin_xyz="0 0 ${wrist_2_length}"
+    parent ="${l_5}" child="${l_6}"
+    limit_l="-3.14" limit_u="3.14" limit_e="1000" limit_v="0.5"/>
+
+  <m_link_mesh name = "${l_6}" 
+  mass ="0.1879" ixx ="0.01713" ixy="0" ixz="0"
+  iyy="0.1713" iyz="0" izz="0.3382"
+  origin_rpy ="0 0 0" origin_xyz="0 0 0"
+  mesh ="package://universal_robot/meshes/visual/wrist3.dae"
+  meshfile ="package://universal_robot/meshes/collision/wrist3.stl" 
+  meshscale ="1 1 1"/>
+
+  <gazebo>
+    <static>false</static>
+    <plugin name ="gazebo_ros_control" filename ="libgazebo_ros_control.so">
+    </plugin>
+  </gazebo>
+</robot>
+

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<!--joint-->
+
+    <xacro:macro name="m_joint" params = "name type axis_xyz  origin_rpy origin_xyz parent child limit_e limit_l limit_u limit_v">
+        <joint name="${name}" type="${type}">
+            <limit lower="${limit_l}" upper="${limit_u}" effort="${limit_e}" velocity="${limit_v}"/>
+            <origin rpy="${origin_rpy}" xyz="${origin_xyz}"/>
+            <parent link="${parent}"/>
+            <child link="${child}"/>
+            <axis xyz="${axis_xyz}"/>
+            
+
+        </joint>
+        <transmission name="trans_${name}" >
+                <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${name}">
+                    <hardwareInterface >hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="motor_${name}">
+
+                <hardwareInterface >ardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+    </xacro:macro>
+    <!--link-->
+    <xacro:macro name="m_link_mesh" params="name origin_rpy origin_xyz mesh meshfile meshscale ixx ixy ixz iyy iyz izz mass">
+        <link name="${name}">
+            <inertial>
+                <mass value="${mass}"/>
+                 <origin rpy="${origin_rpy}" xyz="${origin_xyz}"/>
+                    <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}"/>
+            </inertial>
+            <visual>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}"/>
+             <geometry>               
+                <mesh filename="${mesh}" />                    
+            </geometry>
+                <material name=" ">
+                        <color rgba="0.79294 0.79294 0.79294 1"/>
+                </material>
+            </visual>
+            <collision>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}"/>
+            <geometry>
+                <mesh filename="${meshfile}" scale="${meshscale}"/>
+            </geometry>
+            </collision>
+        </link>
+    </xacro:macro>
+</robot>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:property name= "l_0" value = "Base"/>
+    <xacro:property name= "l_1" value= "Shoulder"/>
+    <xacro:property name= "l_2" value= "Elbow"/>
+    <xacro:property name= "l_3" value= "Wrist_1"/>
+    <xacro:property name= "l_4" value= "Wrist_2"/>
+    <xacro:property name= "l_5" value= "Wrist_3"/>
+    <xacro:property name= "l_6" value= "Tool_Flange"/>
+</robot>
